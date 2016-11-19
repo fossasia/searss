@@ -15,3 +15,6 @@ Install requirements using `pip install -r requirements.txt`
 
 # Using
 Run `python rss-generator.py` and enter the search query. A RSS feed will be displayed containing the search results.
+
+To script the rss generator, pipe a query into `rss-generator.py` and write the result to a file, for example:
+`echo "fossasia" | python rss-generator.py > /tmp/fossasia.rss`
