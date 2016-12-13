@@ -1,54 +1,53 @@
-import mechanize
 from feedgen.feed import FeedGenerator
-import urlparse
+import requests
 from bs4 import BeautifulSoup
 
-def generateFeed(urls):
+SEARCH_ENDPOINT = "https://duckduckgo.com/html/"
+
+# python 2 and 3 compatibility for input function
+try:
+   input = raw_input
+except NameError:
+   pass
+
+
+def generateFeed(results):
     ''' Generates RSS feel from the given urls '''
     fg = FeedGenerator()
-    fg.title('Google Search Results')
-    fg.link(href='http://google.com', rel='alternate')
-    fg.description('Google Seach Results')
-    for url in urls:
+    fg.title('DuckDuckGo Search Results')
+    fg.link(href='http://duckduckgo.com', rel='alternate')
+    fg.description('DuckDuckGo Seach Results')
+    for result in results:
         fe = fg.add_entry()
-        fe.title(url[0])
-        fe.link({'href': url[1], 'rel':'alternate'})
-    print fg.rss_str(pretty=True)
-    # Write to file
-    #fg.rss_file('rss.xml')
+        fe.title(result['title'])
+        fe.link({'href': result['item_url'], 'rel':'alternate'})
+    print(fg.rss_str(pretty=True))
 
-def google_search(query):
-    ''' Search google for the query and return set of urls
-    Returns: urls (list)
-            [[Tile1,url1], [Title2, url2],..]
-    '''
-    urls = []
-    response = get_results_page(query)
-    soup = BeautifulSoup(response.read(), 'html5lib')   # using html5lib parser 
-    # Search for all relevant 'a' tags
-    for a in soup.select('.r a'):
-        parsed_url = urlparse.urlparse(a['href'])
-        # Validate url
-        if 'url' in parsed_url.path:
-            urls.append([a.text, str(urlparse.parse_qs(parsed_url.query)['q'][0])])
-    return urls
 
-def get_results_page(query):
-    ''' Fetch the google search results page
-    Returns : Results Page
-    '''
-    br = mechanize.Browser()
-    br.set_handle_robots(False) # Google's robot.txt prevents from scrapping
-    br.addheaders = [('User-agent','Mozilla/5.0')]
-    br.open('http://www.google.com/')
-    br.select_form(name='f')
-    br.form['q'] = query
-    return br.submit()
+
+def get_search_results(query, limit = 10):
+        resp = requests.get(SEARCH_ENDPOINT, params ={'q':query})
+        soup = BeautifulSoup(resp.content,'html5lib')
+        results = soup.findAll('div',attrs={'class':['result','results_links','results_links_deep','web-result']})
+        meta_list = []
+
+        for result in results[:limit]:
+                try:
+                        meta = {}
+                        meta['title'] = result.h2.text.replace("\n",'').replace("  ","")
+                        meta['item_url'] = result.h2.a['href']
+                        # meta['subtitle'] = result.find('a',attrs={'class':'result__snippet'}).text
+                        # meta['thumbnail'] = 'http:' + result.img['src']
+                        meta_list.append(meta)
+                except:
+                        pass
+        return meta_list
+
 
 def main():
-    query = raw_input("What do you want to search for ? >> ")
-    urls = google_search(query)
-    generateFeed(urls)
+    query = input("What do you want to search for ? >> ")
+    results = get_search_results(query)
+    generateFeed(results)
 
 if __name__ == "__main__":
     main()
