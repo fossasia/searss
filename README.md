@@ -4,9 +4,8 @@ Search to RSS tool
 The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
 
 # Requirements
-* Python 2
+* Python 2 or 3
 * [PIP](https://pip.pypa.io/en/stable/installing/)
-* [Mechanize](http://wwwsearch.sourceforge.net/mechanize/)
 * [Feedgen](https://github.com/lkiesow/python-feedgen)
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 

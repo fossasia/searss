@@ -26,9 +26,10 @@ def generateFeed(results):
 
 
 def get_search_results(query, limit = 10):
-        resp = requests.get(SEARCH_ENDPOINT, params ={'q':query})
-        soup = BeautifulSoup(resp.content,'html5lib')
-        results = soup.findAll('div',attrs={'class':['result','results_links','results_links_deep','web-result']})
+   
+        resp = requests.get(SEARCH_ENDPOINT, params = {'q' : query})
+        soup = BeautifulSoup(resp.content, 'html5lib')
+        results = soup.findAll('div', attrs = {'class' : ['result', 'results_links', 'results_links_deep', 'web-result']})
         meta_list = []
 
         for result in results[:limit]:
