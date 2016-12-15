@@ -4,6 +4,7 @@ import urlparse
 import requests
 from bs4 import BeautifulSoup
 
+
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
 duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS", "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
 
@@ -23,7 +24,7 @@ def generateFeed(urls, query, search_engine):
     # duckduckgo as search engine
     elif search_engine == 1:
         feed = duckduckgo_feed
-        
+
     fg = FeedGenerator()
     fg.title(feed[0])
     fg.link(href = feed[1], rel='alternate')
@@ -37,7 +38,6 @@ def generateFeed(urls, query, search_engine):
     print fg.rss_str(pretty=True)
     # Write rss feed to file
     # fg.rss_file('rss.xml')
-
 
 
 
@@ -55,6 +55,7 @@ def get_results_page(query):
     br.select_form(name='f')
     br.form['q'] = query
     return br.submit()
+
 
 
 def google_search(query):
@@ -129,6 +130,7 @@ def main():
     elif search_engine == 1:
         urls = duckduckgo_search(query)
         generateFeed(urls, query, search_engine)
+
 
 if __name__ == "__main__":
     main()
