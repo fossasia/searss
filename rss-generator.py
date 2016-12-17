@@ -74,10 +74,12 @@ def google_search(query):
         # Search for 'span' containing the short description
         desc = div.find_all('span', class_='st')
         # Search for 'a' containing the link
-        anchor_tag = div.find('.r a')
-        # Skip if invalid div (it does not contain required a tag)
-        if not anchor_tag:
+        try:
+            anchor_tag = div.h3.a
+        except:
+            # Skip if invalid div (it does not contain required a tag)
             continue
+        
         # Validate url
         parsed_url = urlparse.urlparse(anchor_tag['href'])
         if 'url' in parsed_url.path:
