@@ -3,6 +3,7 @@ from feedgen.feed import FeedGenerator
 import urlparse
 import requests
 from bs4 import BeautifulSoup
+import sys
 
 
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
@@ -117,12 +118,22 @@ def duckduckgo_search(query):
 
 
 def main():
-    search_engine = int(raw_input("Select the search engine (0 for google / 1 for duckduckgo): "))
-    if search_engine not in [0, 1]:
-        print("Wrong choice. Please enter a valid choice.")
-        main()
-        
-    query = raw_input("What do you want to search for ? >> ")
+    if len(sys.argv) == 2:
+        print("Wrong number of arguments")
+        exit(0)
+    if len(sys.argv) >= 3:
+        search_engine = int(sys.argv[1])
+        if search_engine not in [0,1]:
+            print("Wrong argument")
+            exit(0)
+        query = ' '.join(sys.argv[2:])
+    else:
+        search_engine = int(raw_input("Select the search engine (0 for google / 1 for duckduckgo): "))
+        if search_engine not in [0, 1]:
+            print("Wrong choice. Please enter a valid choice.")
+            main()
+
+        query = raw_input("What do you want to search for ? >> ")
 
     # google search
     if search_engine == 0:
