@@ -30,13 +30,13 @@ def generateFeed(urls, query, search_engine):
     fg.title(feed[0])
     fg.link(href = feed[1], rel='alternate')
     fg.description(feed[2]%query)
-    
+
     for url in urls:
         fe = fg.add_entry()
         fe.title(url[0])
         fe.link({'href': url[1], 'rel': 'alternate'})
         fe.description(url[2])
-    print fg.rss_str(pretty=True)
+    print(fg.rss_str(pretty=True))
     # Write rss feed to file
     # fg.rss_file('rss.xml')
 
@@ -80,7 +80,7 @@ def google_search(query):
         except:
             # Skip if invalid div (it does not contain required a tag)
             continue
-        
+
         # Validate url
         parsed_url = urlparse.urlparse(anchor_tag['href'])
         if 'url' in parsed_url.path:
