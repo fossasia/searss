@@ -58,10 +58,24 @@ def get_results_page(query):
     br.form['q'] = query
     return br.submit()
 
+def get_duckduckgo_page(query):
+    """
+    Fetch the duckduckgo search results page
+
+    :param query:   String to be searched on duckduckgo
+    :return:        Result page containing search results
+    """
+    br = mechanize.Browser()
+    br.set_handle_robots(False)  # Google's robot.txt prevents from scrapping
+    br.addheaders = [('User-agent', 'Mozilla/5.0')]
+    br.open('http://www.duckduckgo.com/html/')
+    br.select_form(name='x')
+    br.form['q'] = query
+    return br.submit()
+    
 def get_bing_page(query):
     """
     Fetch the bing search results page
-
     :param query:   String to be searched on bing
     :return:        Result page containing search results
     """
@@ -117,10 +131,8 @@ def duckduckgo_search(query):
                     Short description of the result
     """
     urls = []
-    SEARCH_ENDPOINT = "https://duckduckgo.com/html/"
-    resp = requests.get(SEARCH_ENDPOINT, params = {'q' : query})
-    soup = BeautifulSoup(resp.content, 'html5lib')
-
+    response = get_duckduckgo_page(query)
+    soup = BeautifulSoup(response.read(), 'html5lib')
     # Search for all relevant 'div' tags with having the results
     for div in soup.findAll('div', attrs = {'class' : ['result', 'results_links', 'results_links_deep', 'web-result']}):
        # search for title
@@ -144,7 +156,7 @@ def bing_search(query):
     urls = []
     response = get_bing_page(query)
     soup = BeautifulSoup(response.read(), 'html5lib')
-
+    
     # Search for all relevant 'div' tags with having the results
     for li in soup.findAll('li', attrs = {'class' : ['b_algo']}):
        # search for title
