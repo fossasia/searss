@@ -58,10 +58,6 @@ def get_results_page(query):
     br.form['q'] = query
     return br.submit()
 
-def get_bing_page(query):
-    """
-    Fetch the bing search results page
-
 def get_duckduckgo_page(query):
     """
     Fetch the duckduckgo search results page
