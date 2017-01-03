@@ -1,3 +1,4 @@
+
 import mechanize
 from feedgen.feed import FeedGenerator
 import urlparse
@@ -42,8 +43,6 @@ def generateFeed(urls, query, search_engine):
     # Write rss feed to file
     # fg.rss_file('rss.xml')
 
-
-
 def get_results_page(query):
     """
     Fetch the google search results page
@@ -59,6 +58,9 @@ def get_results_page(query):
     br.form['q'] = query
     return br.submit()
 
+def get_bing_page(query):
+    """
+    Fetch the bing search results page
 
 def get_duckduckgo_page(query):
     """
@@ -74,11 +76,10 @@ def get_duckduckgo_page(query):
     br.select_form(name='x')
     br.form['q'] = query
     return br.submit()
-
+    
 def get_bing_page(query):
     """
     Fetch the bing search results page
-
     :param query:   String to be searched on bing
     :return:        Result page containing search results
     """
@@ -98,7 +99,6 @@ def get_bing_page(query):
 def google_search(query):
     """
     Search google for the query and return set of urls
-
     :param query:   String to be searched
     :return:        List of results. Each entry contains Title, URL,
                     Short description of the result
@@ -130,15 +130,11 @@ def google_search(query):
 def duckduckgo_search(query):
     """
     Search google for the query and return set of urls
-
     :param query:   String to be searched
     :return:        List of results. Each entry contains Title, URL,
                     Short description of the result
     """
     urls = []
-    # SEARCH_ENDPOINT = "https://duckduckgo.com/html/"
-    # resp = requests.get(SEARCH_ENDPOINT, params = {'q' : query})
-    # soup = BeautifulSoup(resp.content, 'html5lib')
     response = get_duckduckgo_page(query)
     soup = BeautifulSoup(response.read(), 'html5lib')
     # Search for all relevant 'div' tags with having the results
@@ -162,11 +158,9 @@ def bing_search(query):
                     Short description of the result
     """
     urls = []
-    # SEARCH_ENDPOINT = "https://duckduckgo.com/html/"
-    # resp = requests.get(SEARCH_ENDPOINT, params = {'q' : query})
-    # soup = BeautifulSoup(resp.content, 'html5lib')
     response = get_bing_page(query)
     soup = BeautifulSoup(response.read(), 'html5lib')
+    
     # Search for all relevant 'div' tags with having the results
     for li in soup.findAll('li', attrs = {'class' : ['b_algo']}):
        # search for title
