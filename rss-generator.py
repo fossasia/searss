@@ -1,4 +1,3 @@
-
 DESC = """
 The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
 """
@@ -19,22 +18,15 @@ import urlparse
 import requests
 from bs4 import BeautifulSoup
 import sys
-import argparse
-from argparse import RawTextHelpFormatter
 
 
-google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com",
-               "Google search results for %s")
-duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS",
-                   "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
-bing_feed = ("BING SEARCH RESULTS", "https://www.bing.com",
-             "Bing search results for %s")
-
+google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
+duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS", "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
+bing_feed = ("BING SEARCH RESULTS", "https://www.bing.com", "Bing search results for %s")
 
 def generateFeed(urls, query, search_engine):
     """
     Generates RSS feed from the given urls
-
     :param urls: List of URL. Each entry contains url, title, short description
     :param feed_title: Title of the feed
     :param feed_link: Link of the feed
@@ -51,8 +43,8 @@ def generateFeed(urls, query, search_engine):
 
     fg = FeedGenerator()
     fg.title(feed[0])
-    fg.link(href=feed[1], rel='alternate')
-    fg.description(feed[2] % query)
+    fg.link(href = feed[1], rel='alternate')
+    fg.description(feed[2]%query)
 
     for url in urls:
         fe = fg.add_entry()
@@ -63,11 +55,9 @@ def generateFeed(urls, query, search_engine):
     # Write rss feed to file
     # fg.rss_file('rss.xml')
 
-
 def get_results_page(query):
     """
     Fetch the google search results page
-
     :param query:   String to be searched on Google
     :return:        Result page containing search results
     """
@@ -79,11 +69,9 @@ def get_results_page(query):
     br.form['q'] = query
     return br.submit()
 
-
 def get_duckduckgo_page(query):
     """
     Fetch the duckduckgo search results page
-
     :param query:   String to be searched on duckduckgo
     :return:        Result page containing search results
     """
@@ -94,8 +82,7 @@ def get_duckduckgo_page(query):
     br.select_form(name='x')
     br.form['q'] = query
     return br.submit()
-
-
+    
 def get_bing_page(query):
     """
     Fetch the bing search results page
@@ -114,7 +101,6 @@ def get_bing_page(query):
     br.select_form(nr=formcount)
     br.form['q'] = query
     return br.submit()
-
 
 def google_search(query):
     """
@@ -158,22 +144,20 @@ def duckduckgo_search(query):
     response = get_duckduckgo_page(query)
     soup = BeautifulSoup(response.read(), 'html5lib')
     # Search for all relevant 'div' tags with having the results
-    for div in soup.findAll('div', attrs={'class': ['result', 'results_links', 'results_links_deep', 'web-result']}):
-        # search for title
-        title = div.h2.text.replace("\n", '').replace("  ", "")
-        # get anchor tag having the link
-        url = div.h2.a['href']
-        # get the short description
-        desc = div.find('a', attrs={'class': 'result__snippet'}).text
-        url_entry = [title, url, desc]
-        urls.append(url_entry)
+    for div in soup.findAll('div', attrs = {'class' : ['result', 'results_links', 'results_links_deep', 'web-result']}):
+       # search for title
+       title = div.h2.text.replace("\n",'').replace("  ","")
+       # get anchor tag having the link
+       url = div.h2.a['href']
+       # get the short description
+       desc = div.find('a',attrs={'class':'result__snippet'}).text
+       url_entry = [title, url, desc]
+       urls.append(url_entry)
     return urls
-
 
 def bing_search(query):
     """
     Search bing for the query and return set of the urls
-
     :param query:   String to be searched
     :return:        List of results. Each entry contains Title, URL,
                     Short description of the result
@@ -181,19 +165,18 @@ def bing_search(query):
     urls = []
     response = get_bing_page(query)
     soup = BeautifulSoup(response.read(), 'html5lib')
-
+    
     # Search for all relevant 'div' tags with having the results
-    for li in soup.findAll('li', attrs={'class': ['b_algo']}):
-        # search for title
-        title = li.h2.text.replace("\n", '').replace("  ", "")
-        # get anchor tag having the link
-        url = li.h2.a['href']
-        # get the short description
-        desc = li.find('p').text
-        url_entry = [title, url, desc]
-        urls.append(url_entry)
+    for li in soup.findAll('li', attrs = {'class' : ['b_algo']}):
+       # search for title
+       title = li.h2.text.replace("\n",'').replace("  ","")
+       # get anchor tag having the link
+       url = li.h2.a['href']
+       # get the short description
+       desc = li.find('p').text
+       url_entry = [title, url, desc]
+       urls.append(url_entry)
     return urls
-
 
 def main():
 
