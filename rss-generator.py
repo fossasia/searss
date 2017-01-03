@@ -18,6 +18,8 @@ import urlparse
 import requests
 from bs4 import BeautifulSoup
 import sys
+import argparse
+from argparse import RawTextHelpFormatter
 
 
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
