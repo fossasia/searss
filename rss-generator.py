@@ -1,3 +1,16 @@
+DESC = """
+The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
+"""
+ASCII = """
+ _______  _______  _______  ______    _______  _______ 
+|       ||       ||   _   ||    _ |  |       ||       |
+|  _____||    ___||  |_|  ||   | ||  |  _____||  _____|
+| |_____ |   |___ |       ||   |_||_ | |_____ | |_____ 
+|_____  ||    ___||       ||    __  ||_____  ||_____  |
+ _____| ||   |___ |   _   ||   |  | | _____| | _____| |
+|_______||_______||__| |__||___|  |_||_______||_______|
+
+"""
 
 import mechanize
 from feedgen.feed import FeedGenerator
@@ -5,6 +18,8 @@ import urlparse
 import requests
 from bs4 import BeautifulSoup
 import sys
+import argparse
+from argparse import RawTextHelpFormatter
 
 
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
@@ -14,7 +29,6 @@ bing_feed = ("BING SEARCH RESULTS", "https://www.bing.com", "Bing search results
 def generateFeed(urls, query, search_engine):
     """
     Generates RSS feed from the given urls
-
     :param urls: List of URL. Each entry contains url, title, short description
     :param feed_title: Title of the feed
     :param feed_link: Link of the feed
@@ -46,7 +60,6 @@ def generateFeed(urls, query, search_engine):
 def get_results_page(query):
     """
     Fetch the google search results page
-
     :param query:   String to be searched on Google
     :return:        Result page containing search results
     """
@@ -61,7 +74,6 @@ def get_results_page(query):
 def get_duckduckgo_page(query):
     """
     Fetch the duckduckgo search results page
-
     :param query:   String to be searched on duckduckgo
     :return:        Result page containing search results
     """
@@ -148,7 +160,6 @@ def duckduckgo_search(query):
 def bing_search(query):
     """
     Search bing for the query and return set of the urls
-
     :param query:   String to be searched
     :return:        List of results. Each entry contains Title, URL,
                     Short description of the result
@@ -170,35 +181,74 @@ def bing_search(query):
     return urls
 
 def main():
-    if len(sys.argv) == 2:
-        print("Wrong number of arguments")
-        exit(0)
-    if len(sys.argv) >= 3:
-        search_engine = int(sys.argv[1])
-        if search_engine not in [0,1]:
-            print("Wrong argument")
-            exit(0)
-        query = ' '.join(sys.argv[2:])
-    else:
-        search_engine = int(raw_input("Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): "))
+
+    """
+    A smart argument parser to efficiently sort arguments 
+    and raise errors properly. Argument parser is scalable.
+    """
+
+    parser = argparse.ArgumentParser(
+        description='\n{}\n{}\n'.format(ASCII,DESC), formatter_class=RawTextHelpFormatter)
+    parser.add_argument('--google', action='store_true',
+                        help='Set search engine as Google')
+    parser.add_argument('--bing', action='store_true',
+                        help='Set search engine as Bing')
+    parser.add_argument('--duckduckgo', action='store_true',
+                        help='Set search engine as DuckDuckGo')
+    parser.add_argument('-q','--query', action='store', dest='query',
+                        help='Specify search query. eg : --query "xkcd comics"')
+    args = parser.parse_args()
+
+    if args.google: #If Google is passed as argument
+        if args.query: #If query is passed as argument
+            query = args.query
+            urls = google_search(query)
+        else:
+            query = raw_input("What do you want to search for ? >> ")
+            urls = google_search(query)
+        generateFeed(urls, query, 0)
+
+    elif args.duckduckgo: #If DuckDuckGo is passed as argument
+        if args.query: #If query is passed as argument
+            query = args.query
+            urls = duckduckgo_search(query)
+        else:
+            query = raw_input("What do you want to search for ? >> ")
+            urls = duckduckgo_search(query)
+        generateFeed(urls, query, 1)
+
+    elif args.bing: #If Bing is passed as argument
+        if args.query: #If query is passed as argument
+            query = args.query
+            urls = bing_search(query)
+        else:
+            query = raw_input("What do you want to search for ? >> ")
+            urls = bing_search(query)
+        generateFeed(urls, query, 2)
+
+    else: #If no arguments or wrong arguments are passed
+        search_engine = int(raw_input(
+            "Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): "))
         if search_engine not in [0, 1, 2]:
             print("Wrong choice. Please enter a valid choice.")
             main()
 
         query = raw_input("What do you want to search for ? >> ")
 
-    # google search
-    if search_engine == 0:
-        urls = google_search(query)
-        generateFeed(urls, query, search_engine)
-    # duckduckgo search
-    elif search_engine == 1:
-        urls = duckduckgo_search(query)
-        generateFeed(urls, query, search_engine)
-    elif search_engine == 2:
-        urls = bing_search(query)
-        generateFeed(urls, query, search_engine)
+        
+        if search_engine == 0:  # Google Search
+            urls = google_search(query)
+            generateFeed(urls, query, search_engine)
+        
+        elif search_engine == 1: # DuckDuckGo Search
+            urls = duckduckgo_search(query)
+            generateFeed(urls, query, search_engine)
+
+        elif search_engine == 2: # Bing Search
+            urls = bing_search(query)
+            generateFeed(urls, query, search_engine)
 
 
 if __name__ == "__main__":
     main()
+    
