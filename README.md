@@ -14,7 +14,7 @@
 
 ##### The goal of this mini-tool is to gather search results and store them as RSS feeds on a server.
 
-![alt tag](workflow.gif)
+<img src="workflow.gif" height=500px; />
 
 ## Dependencies
 * Python 2.x
