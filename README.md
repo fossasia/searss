@@ -17,7 +17,8 @@
 <img src="workflow.gif" height=500px; />
 
 ## Dependencies
-* Python 2.x
+
+* [Python 2.x](https://www.python.org/download/releases/2.7/)
 * [Pip](https://pip.pypa.io/en/stable/installing/)
 * [Mechanize](http://wwwsearch.sourceforge.net/mechanize/)
 * [Feedgen](https://github.com/lkiesow/python-feedgen)
@@ -25,9 +26,14 @@
 * [Requests](http://docs.python-requests.org/en/master/)
 
 ## Installing
+
+Clone this repository `git clone https://github.com/fossasia/searss`
+cd into directory `cd searss`
 Install requirements using `pip install -r requirements.txt`
 
+
 ## Usage and Options
+
 Run `python rss-generator.py -h` to view the help menu.
 ```
 optional arguments:
@@ -37,6 +43,7 @@ optional arguments:
   --duckduckgo          Set search engine as DuckDuckGo
   -q, --query           Specify search query. eg : --query "xkcd comics"
 ```
+
 If `rss-generator.py` is run without any arguments, it will prompt you for the search engine and the query.
 ```
 $ python rss-generator.py   
@@ -44,6 +51,7 @@ $ Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): 0
 $ What do you want to search for ? >> xkcd comics
 
 ```
+### Piping into files
 To script the rss generator, pipe a query into `rss-generator.py` and write the result to a file, for example:
 `python rss-generator.py --google --query "fossasia" > /tmp/fossasia.rss`
 
