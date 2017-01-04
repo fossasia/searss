@@ -27,9 +27,9 @@
 
 ## Installing
 
-Clone this repository `git clone https://github.com/fossasia/searss`
-cd into directory `cd searss`
-Install requirements using `pip install -r requirements.txt`
+1. Clone this repository `git clone https://github.com/fossasia/searss`
+2. cd into directory `cd searss`
+3. Install requirements using `pip install -r requirements.txt`
 
 
 ## Usage and Options
