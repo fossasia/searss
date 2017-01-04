@@ -1,21 +1,50 @@
-# searss
-Search to RSS tool
+```
+ _______  _______  _______  ______    _______  _______ 
+|       ||       ||   _   ||    _ |  |       ||       |
+|  _____||    ___||  |_|  ||   | ||  |  _____||  _____|
+| |_____ |   |___ |       ||   |_||_ | |_____ | |_____ 
+|_____  ||    ___||       ||    __  ||_____  ||_____  |
+ _____| ||   |___ |   _   ||   |  | | _____| | _____| |
+|_______||_______||__| |__||___|  |_||_______||_______|
 
-The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
+```
 
-# Requirements
-* Python 2
-* [PIP](https://pip.pypa.io/en/stable/installing/)
+
+### Search To RSS Tool
+
+##### The goal of this mini-tool is to gather search results and store them as RSS feeds on a server.
+
+![alt tag](workflow.gif)
+
+## Dependencies
+* Python 2.x
+* [Pip](https://pip.pypa.io/en/stable/installing/)
 * [Mechanize](http://wwwsearch.sourceforge.net/mechanize/)
 * [Feedgen](https://github.com/lkiesow/python-feedgen)
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 * [Requests](http://docs.python-requests.org/en/master/)
 
-# Installing
+## Installing
 Install requirements using `pip install -r requirements.txt`
 
-# Using
-Run `python rss-generator.py` and select the search engine (google or duckduckgo) and then enter the search query. A RSS feed will be displayed containing the search results.
+## Usage and Options
+Run `python rss-generator.py -h` to view the help menu.
+```
+optional arguments:
+  -h, --help            show this help message and exit
+  --google              Set search engine as Google
+  --bing                Set search engine as Bing
+  --duckduckgo          Set search engine as DuckDuckGo
+  -q, --query           Specify search query. eg : --query "xkcd comics"
+```
+If `rss-generator.py` is run without any arguments, it will prompt you for the search engine and the query.
+```
+$ python rss-generator.py   
+$ Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): 0
+$ What do you want to search for ? >> xkcd comics
 
+```
 To script the rss generator, pipe a query into `rss-generator.py` and write the result to a file, for example:
-`echo "fossasia" | python rss-generator.py > /tmp/fossasia.rss`
+`python rss-generator.py --google --query "fossasia" > /tmp/fossasia.rss`
+
+
