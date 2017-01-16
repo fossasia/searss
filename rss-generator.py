@@ -113,7 +113,7 @@ def google_search(query):
     """
     urls = []
     response = get_results_page(query)
-    soup = BeautifulSoup(response.read(), 'html5lib')   # using html5lib parser
+    soup = BeautifulSoup(response.read(), 'lxml')   # using lxml parser
     # Search for all relevant 'div' tags with class 'g'
     for div in soup.find_all('div', class_='g'):
         # Search for 'span' containing the short description
@@ -144,7 +144,7 @@ def duckduckgo_search(query):
     """
     urls = []
     response = get_duckduckgo_page(query)
-    soup = BeautifulSoup(response.read(), 'html5lib')
+    soup = BeautifulSoup(response.read(), 'lxml')
     # Search for all relevant 'div' tags with having the results
     for div in soup.findAll('div', attrs = {'class' : ['result', 'results_links', 'results_links_deep', 'web-result']}):
        # search for title
@@ -166,7 +166,7 @@ def bing_search(query):
     """
     urls = []
     response = get_bing_page(query)
-    soup = BeautifulSoup(response.read(), 'html5lib')
+    soup = BeautifulSoup(response.read(), 'lxml')
     
     # Search for all relevant 'div' tags with having the results
     for li in soup.findAll('li', attrs = {'class' : ['b_algo']}):
