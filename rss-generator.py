@@ -25,6 +25,7 @@ from argparse import RawTextHelpFormatter
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
 duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS", "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
 bing_feed = ("BING SEARCH RESULTS", "https://www.bing.com", "Bing search results for %s")
+askcom_feed = ("ASK.COM SEARCH RESULTS", "http://www.ask.com", "Ask.com search results for %s")
 
 def generateFeed(urls, query, search_engine):
     """
@@ -42,6 +43,8 @@ def generateFeed(urls, query, search_engine):
         feed = duckduckgo_feed
     elif search_engine == 2:
         feed = bing_feed
+    elif search_engine == 3:
+        feed = askcom_feed
 
     fg = FeedGenerator()
     fg.title(feed[0])
@@ -98,6 +101,25 @@ def get_bing_page(query):
     formcount = 0
     for form in br.forms():
         if str(form.attrs["id"]) == "sb_form":
+            break
+        formcount += 1
+    br.select_form(nr=formcount)
+    br.form['q'] = query
+    return br.submit()
+
+def get_askcom_page(query):
+    """
+    Fetch the ask.com search results page
+    :param query:   String to be searched on ask.com
+    :return:        Result page containing search results
+    """
+    br = mechanize.Browser()
+    br.set_handle_robots(False)  # Google's robot.txt prevents from scrapping
+    br.addheaders = [('User-agent', 'Mozilla/5.0')]
+    br.open('http://www.ask.com/web')
+    formcount = 0
+    for form in br.forms():
+        if str(form.attrs["id"]) == "main-search":
             break
         formcount += 1
     br.select_form(nr=formcount)
@@ -180,6 +202,28 @@ def bing_search(query):
        urls.append(url_entry)
     return urls
 
+def askcom_search(query):
+    """
+    Search google for the query and return set of urls
+    :param query:   String to be searched
+    :return:        List of results. Each entry contains Title, URL,
+                    Short description of the result
+    """
+    urls = []
+    response = get_askcom_page(query)
+    soup = BeautifulSoup(response.read(), 'html.parser')
+    # Search for all relevant 'div' tags with having the results
+    for div in soup.findAll('div', class_="tsrc_tled"):
+       # search for title
+       title = div.h2.text.replace("\n",'').replace("  ","")
+       # get anchor tag having the link
+       url = div.h2.a['href']
+       # get the short description
+       desc = div.find('p', class_="web-result-description").text
+       url_entry = [title, url, desc]
+       urls.append(url_entry)
+    return urls
+
 def main():
 
     """
@@ -195,6 +239,8 @@ def main():
                         help='Set search engine as Bing')
     parser.add_argument('--duckduckgo', action='store_true',
                         help='Set search engine as DuckDuckGo')
+    parser.add_argument('--askcom', action='store_true',
+                        help='Set search engine as Ask.com')
     parser.add_argument('-q','--query', action='store', dest='query',
                         help='Specify search query. eg : --query "xkcd comics"')
     args = parser.parse_args()
@@ -226,10 +272,19 @@ def main():
             urls = bing_search(query)
         generateFeed(urls, query, 2)
 
+    elif args.askcom: #If Bing is passed as argument
+        if args.query: #If query is passed as argument
+            query = args.query
+            urls = askcom_search(query)
+        else:
+            query = raw_input("What do you want to search for ? >> ")
+            urls = askcom_search(query)
+        generateFeed(urls, query, 3)
+
     else: #If no arguments or wrong arguments are passed
         search_engine = int(raw_input(
-            "Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): "))
-        if search_engine not in [0, 1, 2]:
+            "Select the search engine (0 for google / 1 for duckduckgo / 2 for bing / 3 for ask.com): "))
+        if search_engine not in [0, 1, 2, 3]:
             print("Wrong choice. Please enter a valid choice.")
             main()
 
@@ -248,6 +303,9 @@ def main():
             urls = bing_search(query)
             generateFeed(urls, query, search_engine)
 
+        elif search_engine == 3: # Susper Search
+            urls = askcom_search(query)
+            generateFeed(urls, query, search_engine)
 
 if __name__ == "__main__":
     main()

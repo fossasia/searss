@@ -41,18 +41,17 @@ optional arguments:
   --google              Set search engine as Google
   --bing                Set search engine as Bing
   --duckduckgo          Set search engine as DuckDuckGo
+  --askcom          	Set search engine as Ask.com
   -q, --query           Specify search query. eg : --query "xkcd comics"
 ```
 
 If `rss-generator.py` is run without any arguments, it will prompt you for the search engine and the query.
 ```
 $ python rss-generator.py   
-$ Select the search engine (0 for google / 1 for duckduckgo / 2 for bing): 0
+$ Select the search engine (0 for google / 1 for duckduckgo / 2 for bing / 3 for ask.com): 0
 $ What do you want to search for ? >> xkcd comics
 
 ```
 ### Piping into files
 To script the rss generator, pipe a query into `rss-generator.py` and write the result to a file, for example:
 `python rss-generator.py --google --query "fossasia" > /tmp/fossasia.rss`
-
-
