@@ -233,13 +233,13 @@ def main():
 
     parser = argparse.ArgumentParser(
         description='\n{}\n{}\n'.format(ASCII,DESC), formatter_class=RawTextHelpFormatter)
-    parser.add_argument('--google', action='store_true',
+    parser.add_argument('--google', '-g', action='store_true',
                         help='Set search engine as Google')
-    parser.add_argument('--bing', action='store_true',
+    parser.add_argument('--bing', '-b', action='store_true',
                         help='Set search engine as Bing')
-    parser.add_argument('--duckduckgo', action='store_true',
+    parser.add_argument('--duckduckgo', '-ddg', action='store_true',
                         help='Set search engine as DuckDuckGo')
-    parser.add_argument('--askcom', action='store_true',
+    parser.add_argument('--askcom', '-ask', action='store_true',
                         help='Set search engine as Ask.com')
     parser.add_argument('-q','--query', action='store', dest='query',
                         help='Specify search query. eg : --query "xkcd comics"')
