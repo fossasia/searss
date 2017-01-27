@@ -38,10 +38,10 @@ Run `python rss-generator.py -h` to view the help menu.
 ```
 optional arguments:
   -h, --help            show this help message and exit
-  --google              Set search engine as Google
-  --bing                Set search engine as Bing
-  --duckduckgo          Set search engine as DuckDuckGo
-  --askcom          	Set search engine as Ask.com
+  -g, --google              Set search engine as Google
+  -b, --bing                Set search engine as Bing
+  -ddg, --duckduckgo          Set search engine as DuckDuckGo
+  -ask, --askcom          	Set search engine as Ask.com
   -q, --query           Specify search query. eg : --query "xkcd comics"
 ```
 
