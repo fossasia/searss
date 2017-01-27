@@ -69,10 +69,10 @@ def get_results_page(query):
     br = mechanize.Browser()
     br.set_handle_robots(False)  # Google's robot.txt prevents from scrapping
     br.addheaders = [('User-agent', 'Mozilla/5.0')]
-    br.open('http://www.google.com/')
+    status=br.open('http://www.google.com/')
     br.select_form(name='f')
     br.form['q'] = query
-    return br.submit()
+    return br.submit(),status.code
 
 def get_duckduckgo_page(query):
     """
@@ -97,7 +97,7 @@ def get_bing_page(query):
     br = mechanize.Browser()
     br.set_handle_robots(False)  # Google's robot.txt prevents from scrapping
     br.addheaders = [('User-agent', 'Mozilla/5.0')]
-    br.open('http://www.bing.com/search')
+    status=br.open('http://www.bing.com/search')
     formcount = 0
     for form in br.forms():
         if str(form.attrs["id"]) == "sb_form":
@@ -105,7 +105,7 @@ def get_bing_page(query):
         formcount += 1
     br.select_form(nr=formcount)
     br.form['q'] = query
-    return br.submit()
+    return br.submit(),status.code
 
 def get_askcom_page(query):
     """
@@ -134,7 +134,7 @@ def google_search(query):
                     Short description of the result
     """
     urls = []
-    response = get_results_page(query)
+    response,code = get_results_page(query)
     soup = BeautifulSoup(response.read(), 'lxml')   # using lxml parser
     # Search for all relevant 'div' tags with class 'g'
     for div in soup.find_all('div', class_='g'):
@@ -187,7 +187,7 @@ def bing_search(query):
                     Short description of the result
     """
     urls = []
-    response = get_bing_page(query)
+    response,code = get_bing_page(query)
     soup = BeautifulSoup(response.read(), 'lxml')
     
     # Search for all relevant 'div' tags with having the results
