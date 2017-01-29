@@ -56,7 +56,7 @@ def generateFeed(urls, query, search_engine):
         fe.title(url[0])
         fe.link({'href': url[1], 'rel': 'alternate'})
         fe.description(url[2])
-    print fg.rss_str(pretty=True)
+    print(fg.rss_str(pretty=True))
     # Write rss feed to file
     # fg.rss_file('rss.xml')
 
