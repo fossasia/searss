@@ -2,25 +2,26 @@ DESC = """
 The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
 """
 ASCII = """
- _______  _______  _______  ______    _______  _______ 
+ _______  _______  _______  ______    _______  _______
 |       ||       ||   _   ||    _ |  |       ||       |
 |  _____||    ___||  |_|  ||   | ||  |  _____||  _____|
-| |_____ |   |___ |       ||   |_||_ | |_____ | |_____ 
+| |_____ |   |___ |       ||   |_||_ | |_____ | |_____
 |_____  ||    ___||       ||    __  ||_____  ||_____  |
  _____| ||   |___ |   _   ||   |  | | _____| | _____| |
 |_______||_______||__| |__||___|  |_||_______||_______|
 
 """
 
-import mechanize
-from feedgen.feed import FeedGenerator
-import urlparse
-import requests
-from bs4 import BeautifulSoup
-import sys
 import argparse
 from argparse import RawTextHelpFormatter
+import sys
+import urlparse
 
+from bs4 import BeautifulSoup
+import requests
+
+from feedgen.feed import FeedGenerator
+import mechanize
 
 google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com", "Google search results for %s")
 duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS", "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
@@ -87,7 +88,7 @@ def get_duckduckgo_page(query):
     br.select_form(name='x')
     br.form['q'] = query
     return br.submit()
-    
+
 def get_bing_page(query):
     """
     Fetch the bing search results page
@@ -189,7 +190,7 @@ def bing_search(query):
     urls = []
     response,code = get_bing_page(query)
     soup = BeautifulSoup(response.read(), 'lxml')
-    
+
     # Search for all relevant 'div' tags with having the results
     for li in soup.findAll('li', attrs = {'class' : ['b_algo']}):
        # search for title
@@ -227,7 +228,7 @@ def askcom_search(query):
 def main():
 
     """
-    A smart argument parser to efficiently sort arguments 
+    A smart argument parser to efficiently sort arguments
     and raise errors properly. Argument parser is scalable.
     """
 
@@ -290,11 +291,11 @@ def main():
 
         query = raw_input("What do you want to search for ? >> ")
 
-        
+
         if search_engine == 0:  # Google Search
             urls = google_search(query)
             generateFeed(urls, query, search_engine)
-        
+
         elif search_engine == 1: # DuckDuckGo Search
             urls = duckduckgo_search(query)
             generateFeed(urls, query, search_engine)
@@ -309,4 +310,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

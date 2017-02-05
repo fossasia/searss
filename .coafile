@@ -1,4 +1,5 @@
 [Spacing]
-files = ./**/*.py
-bears = SpaceConsistencyBear
+files = **.py
+bears = SpaceConsistencyBear, PyImportSortBear, PEP8Bear
 use_spaces = True
+from_first_in_import = True
