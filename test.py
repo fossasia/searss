@@ -39,10 +39,42 @@ class TestBingSearch(unittest.TestCase):
 
 
 
+class TestDuckduckgoSearch(unittest.TestCase):
 
+	query = "FOSSASIA"
+
+	def test_availablity(self):
+
+		print "Testing for duckduckgo Availablity"
+		result,code = rssgen.get_duckduckgo_page(self.query)
+		self.assertEqual(code,200)
+
+	def test_search(self):
+
+		print "Testing for duckduckgo Search"
+		url=rssgen.duckduckgo_search(self.query)
+		self.assertIsNotNone(len(url))
+
+class TestAskcomSearch(unittest.TestCase):
+
+	query = "FOSSASIA"
+
+	def test_availablity(self):
+
+		print "Testing for Ask.com Availablity"
+		result,code = rssgen.get_askcom_page(self.query)
+		self.assertEqual(code,200)
+
+	def test_search(self):
+
+		print "Teting for Ask.com Search"
+		url = rssgen.askcom_search(self.query)
+		self.assertIsNotNone(len(url))
+
+class TestFeedGenerator(unittest.TestCase):
 
 if __name__ == '__main__':
-    test_classes = [TestGoogleSearch, TestBingSearch]
+    test_classes = [TestGoogleSearch, TestBingSearch, TestDuckduckgoSearch,TestAskcomSearch]
 
     loader = unittest.TestLoader()
 
