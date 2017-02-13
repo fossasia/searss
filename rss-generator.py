@@ -1,9 +1,7 @@
 import mechanize
 from feedgen.feed import FeedGenerator
 import urlparse
-import requests
 from bs4 import BeautifulSoup
-import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
@@ -110,6 +108,7 @@ def get_duckduckgo_page(query):
     br.form['q'] = query
     return br.submit(), status.code
 
+
 def get_bing_page(query):
     """
     Fetch the bing search results page
@@ -119,7 +118,7 @@ def get_bing_page(query):
     br = mechanize.Browser()
     br.set_handle_robots(False)  # Google's robot.txt prevents from scrapping
     br.addheaders = [('User-agent', 'Mozilla/5.0')]
-    status= br.open('http://www.bing.com/search')
+    status = br.open('http://www.bing.com/search')
     formcount = 0
     for form in br.forms():
         if str(form.attrs["id"]) == "sb_form":
