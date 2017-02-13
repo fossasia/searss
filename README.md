@@ -1,14 +1,14 @@
 ```
- _______  _______  _______  ______    _______  _______ 
+ _______  _______  _______  ______    _______  _______
 |       ||       ||   _   ||    _ |  |       ||       |
 |  _____||    ___||  |_|  ||   | ||  |  _____||  _____|
-| |_____ |   |___ |       ||   |_||_ | |_____ | |_____ 
+| |_____ |   |___ |       ||   |_||_ | |_____ | |_____
 |_____  ||    ___||       ||    __  ||_____  ||_____  |
  _____| ||   |___ |   _   ||   |  | | _____| | _____| |
 |_______||_______||__| |__||___|  |_||_______||_______|
 
 ```
-
+[![Build Status](https://travis-ci.org/fossasia/searss.svg?branch=master)](https://travis-ci.org/fossasia/searss)
 
 ### Search To RSS Tool
 
@@ -47,7 +47,7 @@ optional arguments:
 
 If `rss-generator.py` is run without any arguments, it will prompt you for the search engine and the query.
 ```
-$ python rss-generator.py   
+$ python rss-generator.py
 $ Select the search engine (0 for google / 1 for duckduckgo / 2 for bing / 3 for ask.com): 0
 $ What do you want to search for ? >> xkcd comics
 
