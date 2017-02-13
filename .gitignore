@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# .orig files generated from coala
+*.orig
+
 # C extensions
 *.so
 
