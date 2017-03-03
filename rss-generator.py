@@ -1,15 +1,5 @@
-import mechanize
-from feedgen.feed import FeedGenerator
-import urlparse
-import requests
-from bs4 import BeautifulSoup
-import sys
-import argparse
-from argparse import RawTextHelpFormatter
-
 DESC = """
-    The goal of this mini-tool is gather search results and store it as an RSS
-    feed on a server.
+The goal of this mini-tool is gather search results and store it as an RSS feed on a server.
 """
 ASCII = """
  _______  _______  _______  ______    _______  _______
@@ -22,28 +12,25 @@ ASCII = """
 
 """
 
+import argparse
+from argparse import RawTextHelpFormatter
+import sys
+import urlparse
 
-google_feed = (
-    "GOOGLE SEARCH RESULTS",
-    "htps://www.google.com",
-    "Google search results for %s"
-)
+from bs4 import BeautifulSoup
+import requests
 
-duckduckgo_feed = (
-    "DUCKDUCKGO SEARCH RESULTS",
-    "htps://www.duckduckgo.com",
-    "Duckduckgo search results for %s"
-)
-bing_feed = (
-    "BING SEARCH RESULTS",
-    "https://www.bing.com",
-    "Bing search results for %s"
-)
-askcom_feed = (
-    "ASK.COM SEARCH RESULTS",
-    "http://www.ask.com",
-    "Ask.com search results for %s"
-)
+from feedgen.feed import FeedGenerator
+import mechanize
+
+google_feed = ("GOOGLE SEARCH RESULTS", "htps://www.google.com",
+               "Google search results for %s")
+duckduckgo_feed = ("DUCKDUCKGO SEARCH RESULTS",
+                   "htps://www.duckduckgo.com", "Duckduckgo search results for %s")
+bing_feed = ("BING SEARCH RESULTS", "https://www.bing.com",
+             "Bing search results for %s")
+askcom_feed = ("ASK.COM SEARCH RESULTS", "http://www.ask.com",
+               "Ask.com search results for %s")
 
 
 def generateFeed(urls, query, search_engine):
@@ -75,11 +62,10 @@ def generateFeed(urls, query, search_engine):
         fe.title(url[0])
         fe.link({'href': url[1], 'rel': 'alternate'})
         fe.description(url[2])
-
-    print(fg.rss_str(pretty=True))
+    print fg.rss_str(pretty=True)
     # Write rss feed to file
     # fg.rss_file('rss.xml')
-
+    return fg.rss_str()
 
 def get_results_page(query):
     """
@@ -192,20 +178,8 @@ def duckduckgo_search(query):
     response,code = get_duckduckgo_page(query)
     soup = BeautifulSoup(response.read(), 'lxml')
     # Search for all relevant 'div' tags with having the results
-    for div in soup.findAll(
-        'div',
-        attrs={
-            'class': [
-                'result',
-                'results_links',
-                'results_links_deep',
-                'web-result'
-            ]
-        }
-    ):
-
+    for div in soup.findAll('div', attrs={'class': ['result', 'results_links', 'results_links_deep', 'web-result']}):
         # search for title
-
         title = div.h2.text.replace("\n", '').replace("  ", "")
         # get anchor tag having the link
         url = div.h2.a['href']
@@ -264,16 +238,13 @@ def askcom_search(query):
 
 
 def main():
-
     """
     A smart argument parser to efficiently sort arguments
     and raise errors properly. Argument parser is scalable.
     """
 
     parser = argparse.ArgumentParser(
-        description='\n{}\n{}\n'.format(ASCII, DESC),
-        formatter_class=RawTextHelpFormatter
-    )
+        description='\n{}\n{}\n'.format(ASCII, DESC), formatter_class=RawTextHelpFormatter)
     parser.add_argument('--google', '-g', action='store_true',
                         help='Set search engine as Google')
     parser.add_argument('--bing', '-b', action='store_true',
@@ -283,14 +254,11 @@ def main():
     parser.add_argument('--askcom', '-ask', action='store_true',
                         help='Set search engine as Ask.com')
     parser.add_argument('-q', '--query', action='store', dest='query',
-                        help='Specify search query. eg : --query "xkcd comics"'
-                        )
+                        help='Specify search query. eg : --query "xkcd comics"')
     args = parser.parse_args()
 
-    if args.google:
-        # If Google is passed as argument
-        if args.query:
-            # If query is passed as argument
+    if args.google:  # If Google is passed as argument
+        if args.query:  # If query is passed as argument
             query = args.query
             urls = google_search(query)
         else:
@@ -298,10 +266,8 @@ def main():
             urls = google_search(query)
         generateFeed(urls, query, 0)
 
-    elif args.duckduckgo:
-        # If DuckDuckGo is passed as argument
-        if args.query:
-            # If query is passed as argument
+    elif args.duckduckgo:  # If DuckDuckGo is passed as argument
+        if args.query:  # If query is passed as argument
             query = args.query
             urls = duckduckgo_search(query)
         else:
@@ -309,10 +275,8 @@ def main():
             urls = duckduckgo_search(query)
         generateFeed(urls, query, 1)
 
-    elif args.bing:
-        # If Bing is passed as argument
-        if args.query:
-            # If query is passed as argument
+    elif args.bing:  # If Bing is passed as argument
+        if args.query:  # If query is passed as argument
             query = args.query
             urls = bing_search(query)
         else:
@@ -320,10 +284,8 @@ def main():
             urls = bing_search(query)
         generateFeed(urls, query, 2)
 
-    elif args.askcom:
-        # If Bing is passed as argument
-        if args.query:
-            # If query is passed as argument
+    elif args.askcom:  # If Bing is passed as argument
+        if args.query:  # If query is passed as argument
             query = args.query
             urls = askcom_search(query)
         else:
@@ -331,38 +293,30 @@ def main():
             urls = askcom_search(query)
         generateFeed(urls, query, 3)
 
-    else:
-        # If no arguments or wrong arguments are passed
+    else:  # If no arguments or wrong arguments are passed
         search_engine = int(raw_input(
-            "Select the search engine " +
-            "(0 for google / 1 for duckduckgo / 2 for bing / 3 for ask.com): "
-        ))
+            "Select the search engine (0 for google / 1 for duckduckgo / 2 for bing / 3 for ask.com): "))
         if search_engine not in [0, 1, 2, 3]:
             print("Wrong choice. Please enter a valid choice.")
             main()
 
         query = raw_input("What do you want to search for ? >> ")
 
-        if search_engine == 0:
-            # Google Search
+        if search_engine == 0:  # Google Search
             urls = google_search(query)
             generateFeed(urls, query, search_engine)
 
-        elif search_engine == 1:
-            # DuckDuckGo Search
+        elif search_engine == 1:  # DuckDuckGo Search
             urls = duckduckgo_search(query)
             generateFeed(urls, query, search_engine)
 
-        elif search_engine == 2:
-            # Bing Search
+        elif search_engine == 2:  # Bing Search
             urls = bing_search(query)
             generateFeed(urls, query, search_engine)
 
-        elif search_engine == 3:
-            # Susper Search
+        elif search_engine == 3:  # Susper Search
             urls = askcom_search(query)
             generateFeed(urls, query, search_engine)
-
 
 if __name__ == "__main__":
     main()

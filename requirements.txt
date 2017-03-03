@@ -6,3 +6,4 @@ lxml
 pytest
 pytest-cov
 coveralls
+xmlunittest==0.4.0
