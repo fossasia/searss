@@ -9,13 +9,13 @@ class TestGoogleSearch(unittest.TestCase):
 
     def test_availability(self):
 
-        print "Testing for Google Availablity"
+        print("Testing for Google Availablity")
         result, code = rssgen.get_results_page(self.query)
         self.assertEqual(code, 200)
 
     def test_search(self):
 
-        print "Testing for Google Search"
+        print("Testing for Google Search")
         url = rssgen.google_search(self.query)
         self.assertIsNotNone(len(url))
 
@@ -26,12 +26,12 @@ class TestBingSearch(unittest.TestCase):
 
     def test_availability(self):
 
-        print "Testing for Bing Availablity"
+        print("Testing for Bing Availablity")
         result, code = rssgen.get_bing_page(self.query)
         self.assertEqual(code, 200)
 
     def test_search(self):
-    	print "Testing for Bing Search"
+    	print("Testing for Bing Search")
         url = rssgen.bing_search(self.query)
         self.assertIsNotNone(len(url))
 
@@ -42,13 +42,13 @@ class TestDuckduckgoSearch(unittest.TestCase):
 
 	def test_availablity(self):
 
-		print "Testing for duckduckgo Availablity"
+		print("Testing for duckduckgo Availablity")
 		result,code = rssgen.get_duckduckgo_page(self.query)
 		self.assertEqual(code,200)
 
 	def test_search(self):
 
-		print "Testing for duckduckgo Search"
+		print("Testing for duckduckgo Search")
 		url=rssgen.duckduckgo_search(self.query)
 		self.assertIsNotNone(len(url))
 
@@ -58,13 +58,13 @@ class TestAskcomSearch(unittest.TestCase):
 
 	def test_availablity(self):
 
-		print "Testing for Ask.com Availablity"
+		print("Testing for Ask.com Availablity")
 		result,code = rssgen.get_askcom_page(self.query)
 		self.assertEqual(code,200)
 
 	def test_search(self):
 
-		print "Teting for Ask.com Search"
+		print("Teting for Ask.com Search")
 		url = rssgen.askcom_search(self.query)
 		self.assertIsNotNone(len(url))
 

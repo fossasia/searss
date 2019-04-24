@@ -1,5 +1,5 @@
 import mechanize
-from feedgen.feed import FeedGenerator
+import feedgenerator
 import urlparse
 import requests
 from bs4 import BeautifulSoup
@@ -65,7 +65,7 @@ def generateFeed(urls, query, search_engine):
     elif search_engine == 3:
         feed = askcom_feed
 
-    fg = FeedGenerator()
+    fg = feedgenerator()
     fg.title(feed[0])
     fg.link(href=feed[1], rel='alternate')
     fg.description(feed[2] % query)
